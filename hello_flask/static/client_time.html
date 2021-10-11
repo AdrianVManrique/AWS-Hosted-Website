@@ -15,7 +15,7 @@
 	</div>
 	<p style="text-align:center;font-weight:bold;font-size: 40px;"> It is always time to watch Star Wars </p>
 	<img src="tumblr_pmryfwvynR1xi4ud3o3_500.gif" alt="Death Star Run">
-	<img src="200.gif">
+	<img id="slowmo" src="200.gif">
 	<img src="30429107557a80f2487359ece1f5c358.gif">
 	<img src="clone-wars-clone-trooper.gif">
 	<img src="commandos.gif">
@@ -23,6 +23,7 @@
 	<img src="bd7e8917386759f2a33662b77e1fae20.gif">
 	<script>
 		setInterval( function(){ $('#mytime').html( "Time is " + new Date());}, 500);
+		setInterval( function(){ $('#slowmo').hide("slow");},1000);
 	</script>
     </body>
 </html>
