@@ -59,9 +59,128 @@ def auth():
         print(request.form)
         return json_response(data=request.form)
 
+#Assignment3
+@app.route('/authUser',  methods=['POST']) #endpoint
+def authUser():
+    print(request.form)
+    print("------------")
+    jwt_str = jwt.encode({"username": request.form['userName']}, JWT_SECRET, algorithm='HS256')
+    checkUser = checkToken(jwt_str)
+    if checkUser == False:
+        return json_response(status='401', msg='User does not exist')
+    cur = global_db_con.cursor()
+    userNameStr = "select password from users where username='"
+    userNameStr+= request.form['userName']
+    userNameStr+= "';"
+    cur.execute(userNameStr)
+    r = cur.fetchone()
+    #print(r[0])
+    userPass = str(r[0])
+    if bcrypt.checkpw(  bytes(request.form['pWord'],  'utf-8' ) , userPass.encode('utf-8')):
+            print("-------------------")
+            print(jwt_str)
+            return json_response(jwt=jwt_str)
+    print("INVALID")
+    return json_response(status='401', msg='Invalid Password')
+
+        
+@app.route('/addUser',  methods=['POST']) #endpoint
+def addUser():
+    print(request.form)
+    tempUser = request.form['nName']
+    tempPass = request.form['newWord']
+    salted = bcrypt.hashpw( bytes(request.form['newWord'],  'utf-8' ) , bcrypt.gensalt(10))
+    print(tempUser)
+    #print(salted.decode('utf-8'))
+    submission = "insert into users(username, password) values( '"
+    submission+= str(tempUser)
+    submission+= "','" 
+    submission+= str(salted.decode('utf-8'))
+    submission+= "');"
+    print(submission) 
+    #Hash the password then add to database
+    cur = global_db_con.cursor()
+    cur.execute(submission)
+    #cur.execute("insert into users(username, password) values ('Rose', 'Megapassword');")
+    global_db_con.commit()
+
+    jwt_str = jwt.encode({"username": request.form['nName']}, JWT_SECRET, algorithm='HS256')
 
 
-#Assigment 2
+    return json_response(jwt=jwt_str)
+
+@app.route('/getBooks',  methods=['GET']) #endpoint
+def getBooks():
+    print("Veryifying JWT")
+    authHeader = request.headers.get('Authorization')
+    #print(authHeader)
+    tokenVal = checkToken(authHeader)
+    #Check Token
+    #print("++++++++")
+    #print(decoded.get('username'))
+    #print("++++++++")
+    #tokenVal = checkToken('Tiffany')
+    if tokenVal == False:
+        return json_response(status='404', msg='Invalid JWT Token')
+
+    print("VALID JWT +++++")
+    cur = global_db_con.cursor()
+    book_requestNames = "select name from books;"
+    cur.execute(book_requestNames)
+    book_responseNames = cur.fetchall()
+    print(book_responseNames)
+
+    book_requestPrice = "select price from books;"
+    cur.execute(book_requestPrice)
+    book_responsePrice = cur.fetchall()
+    print(book_responsePrice)
+    
+    return json_response(jwt=authHeader, bookNames=book_responseNames, bookPrice=book_responsePrice)
+
+@app.route('/buyBook',  methods=['POST']) #endpoint
+def buyBook():
+    print("IM BUYING A BOOK")
+    print(request.form)
+    purchaseInfo = request.form
+    \
+    authHeader = request.headers.get('Authorization')
+    purchaseUser = decodeToken(authHeader)
+    print(purchaseUser)
+
+    submission = "insert into purchases(username, title, date) values( '"
+    submission+= purchaseUser
+    submission+= "','"
+    submission+= request.form['bookTitle']
+    submission+= "','"
+    submission+= request.form['clientDate']
+    submission+= "');"
+    print(submission)
+    cur = global_db_con.cursor()
+    cur.execute(submission)
+    global_db_con.commit()
+    return json_response(status='good')
+
+def decodeToken(authToken):
+    decoded = jwt.decode(authToken, JWT_SECRET, algorithms=["HS256"])
+    tokenString = decoded.get('username')
+    return tokenString
+
+def checkToken(authToken):
+    print(authToken)
+    tokenString = decodeToken(authToken)
+    cur = global_db_con.cursor()
+    
+    dbUser = "select exists (select username from users where username = '"
+    #dbUser+= 'Tiffany'
+    dbUser+= tokenString
+    dbUser+= "' limit 1);"
+    cur.execute(dbUser)
+    r = cur.fetchone()
+    print(r[0])
+    if r[0] == True:
+       return True
+    return False
+    #Assigment 2
 @app.route('/ss1') #endpoint
 def ss1():
     return render_template('server_time.html', server_time= str(datetime.datetime.now()) )
@@ -99,4 +218,10 @@ def hellodb():
 
 
 app.run(host='0.0.0.0', port=80)
+
+
+
+
+
+
 
