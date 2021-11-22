@@ -8,49 +8,124 @@
     <body>
 
 	<script>
-		function send_form(){
-			$.post("/open_api/login", { "firstname":$('#fname').val(), "password":$('#password').val()},
-                       		function(data, textStatus) {
-					//this gets called when browser receives response from server
-					console.log(data.token);
-					//Set global JWT
-					jwt = data.token;
-					//make secure call with the jwt
-					get_books();
-				}, "json").fail( function(response) {
-					//this gets called if the server throws an error
-					console.log("error");
-					console.log(response);
-				});
-			return false;
+		$(document).ready(function(){
+			$("#Login").click(loginClicked);
+			$("#Signup").click(signupClicked);
+			$("#Purchase").click(purchaseClicked);
+		});
+
+		var curUser;
+		function signupClicked(){
+			alert("SUBMITTING SIGNUP");
+                        $.ajax({
+                                type: "POST",
+                                url: "/open_api/signUp",
+                                data: $("#signupForm").serialize(),
+                                success: function(data)
+                                {
+                                	$('#signup').hide();
+					alert("SIGNUP CLICKED");
+                                        populateBooks();
+              				curUser = data.username;            
+                                }
+
+                        });
 		}
 
-		function get_books(){
-			 //make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", {} , function(data){
-					console.log("got books"); 
-					console.log(data); 
-					$('#buybook').show();
-					},
-                                                function(err){ console.log(err) });
+		function loginClicked(){
+			alert("SUBMITTING FORM");
+			$.ajax({
+				type: "POST",
+				url: "/open_api/login",
+				data: $("#form").serialize(),
+				success: function(data, textStatus)
+				{
+					//this gets called when browser receives response from server
+                                        console.log(data.token);
+					$('#login').hide();
+                                        //Set global JWT
+                                        jwt = data.token;
+                                        //make secure call with the jwt
+					alert("LOGIN CLICKED");
+                                        populateBooks();
+					curUser = data.username;
+				},
+				error: function(response) 
+				{
+                                        //this gets called if the server throws an error
+					var errMsg = JSON.parse(response.responseText)
+					alert(errMsg.message);
+                                        console.log("error");
+                                        console.log(response);
+                                }
+				
+			});
 		}
-                function buy_book(book_id){
-                         //make secure call with the jwt
-                        secure_get_with_token("/secure_api/get_books", {"book_id" : book_id} , function(data){console.log("got books"); console.log(data)},
-                                                function(err){ console.log(err) });
-                }
+
+		function populateBooks(){
+			//make secure call with the jwt
+			secure_get_with_token("/secure_api/get_books", {} , function(data){
+                                        console.log("got books");
+                                        console.log(data);
+                                        $('#books').show();
+					for(var i=0; i < data.bookNames.length; i++)
+						{
+                                                        $('#bookList').append($('<option>', {
+                                                        value: data.bookNames[i],
+                                                        text: 'Title: ' + data.bookNames[i] + '; Price: $' + data.bookPrice[i]
+                                                        }));
+                                        	}
+                                        },
+                                        function(err){ console.log(err) });
+       
+		}
+
+		function purchaseClicked(){
+			//make secure call with the jwt
+			secure_post_with_token("/secure_api/purchase_book", {'curUserName': curUser, 'bookTitle': $("#bookList").val(), 'clientDate': new Date($.now())}, 
+				function(data){
+					alert("Purchased Book");
+				},
+                                function(err){ console.log(err) });
+		}
+
+		function switch_form(){
+			$('#login').hide();
+                        $('#signup').show();
+			return true;
+		}
+
+		
 
 	</script>
+            </div>
             <div id="login">
-	    	<form >
-  			<label for="fname">First name:</label><br>
-  				<input type="text" id="fname" name="fname" value="John"><br>
-  			<label for="password">Password:</label><br>
-  				<input type="password" id="password" name="password" value="12212"><br><br>
-  			<input type="submit" value="Signup" onclick="return send_form();">
+	    	<form id="form">
+  			<label for="userName">Username:</label><br>
+  				<input type="text" id="userName" name="userName" value="John"><br>
+  			<label for="pWord">Password:</label><br>
+  				<input type="password" id="pWord" name="pWord" value="Doe"><br><br>
+  			<input type="button" value="Login" id="Login">
+			<input type="button" value="Signup" onclick="return switch_form();">
 		</form>
 	    </div>
-	    <button id="buybook" onclick="buy_book(1234)" style="display:none" >Buy Book</button>
+
+	<div id="signup" style="display:none">
+                <form id="signupForm" >
+                        <label for="nUser">New Username:</label><br>
+                                <input type="text" id="nUser" name="nName" value="John"><br>
+                        <label for="newWord">New Password:</label><br>
+                                <input type="password" id="newWord" name="newWord" value="Doe"><br><br>
+                        <input type="button" value="Submit" id="Signup">                       
+                </form>
+            </div>
+	     <div id="books" style="display:none">
+		    <h1>Available Books</h1>
+		    <select name="BookList" id="bookList">
+
+  		    </select>
+
+		    <input type="button" value="Purchase Book" id="Purchase"> </div>
     </body>
 </html>
 
