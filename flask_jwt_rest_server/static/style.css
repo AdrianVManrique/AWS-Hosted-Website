@@ -20,8 +20,8 @@ body {
 }
 
 .button {
-  min-width: 100px;
-  min-height: 20px;
+  min-width: 50px;
+  min-height: 10px;
   font-family: 'Nunito', sans-serif;
   font-size: 22px;
   text-transform: uppercase;
