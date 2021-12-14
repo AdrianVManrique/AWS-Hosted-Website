@@ -3,7 +3,7 @@ var myLat;
 var myLong;
 function initMap() {
     if (navigator.geolocation) {
-        alert("I CAN GET THE COORDS");
+        console.log("I AM GETTING COORDS");
         navigator.geolocation.getCurrentPosition(setPosition);
       } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
