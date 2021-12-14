@@ -10,7 +10,7 @@
     </head>
     <body>
 
-	<script>
+	<script src="./index.js">
 		$(document).ready(function(){
 			$("#Login").click(loginClicked);
 			$("#Signup").click(signupClicked);
@@ -27,9 +27,10 @@
                                 success: function(data)
                                 {
                                 	$('#signup').hide();
-					alert("SIGNUP CLICKED");
-                                        populateBooks();
-              				curUser = data.username;            
+									alert("SIGNUP CLICKED");
+                                    //populateBooks();
+									loadMap();
+              					curUser = data.username;            
                                 }
 
                         });
@@ -49,8 +50,9 @@
                                         //Set global JWT
                                         jwt = data.token;
                                         //make secure call with the jwt
-					alert("LOGIN CLICKED");
-                                        populateBooks();
+										alert("LOGIN CLICKED");
+                                        //populateBooks();
+										loadMap();
 					curUser = data.username;
 				},
 				error: function(response) 
@@ -64,7 +66,13 @@
 				
 			});
 		}
-
+		function loadMap(){
+			//make secure call with jwt
+			secure_get_with_token("/secure_api/get_map", {} , function(data){
+                                        initMap();
+                                        },
+                                        function(err){ console.log(err) });
+		}
 		function populateBooks(){
 			//make secure call with the jwt
 			secure_get_with_token("/secure_api/get_books", {} , function(data){
@@ -133,7 +141,7 @@
 	<div id="map"></div>
 	<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZt2phe1d557anegsJ3vPgeqTuoZuAQSc&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZt2phe1d557anegsJ3vPgeqTuoZuAQSc"
       async
     ></script>
     </body>
