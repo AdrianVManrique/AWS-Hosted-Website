@@ -69,6 +69,7 @@
 		function loadMap(){
 			//make secure call with jwt
 			secure_get_with_token("/secure_api/get_map", {} , function(data){
+										$('#title').hide();
 										$('#floating-panel').show();
                                         initMap();
                                         },
@@ -111,7 +112,10 @@
 
 	</script>
     </div>
-        <div id="login" style="text-align:center" class="wrap">
+		<div id="title" class="wrap">
+			<h1>Map Marker Mania</h1>
+		</div>
+        <div id="login" class="wrap">
 	    	<form id="form">
   			<label for="userName">Username:</label><br>
   				<input type="text" id="userName" name="userName"><br>
