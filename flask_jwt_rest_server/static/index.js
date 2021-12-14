@@ -51,6 +51,5 @@ function addMarker(location, map) {
   }
 
 function deleteMarkers() {
-    hideMarkers();
     markers = [];
 }
