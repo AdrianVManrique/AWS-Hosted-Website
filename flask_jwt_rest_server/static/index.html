@@ -69,7 +69,7 @@
 		function loadMap(){
 			//make secure call with jwt
 			secure_get_with_token("/secure_api/get_map", {} , function(data){
-										$('#title').hide();
+										$('#mainFace').hide();
 										document.getElementById("map").style.height = "100%";
 										$('#map').show();
 										$('#floating-panel').show();
@@ -114,7 +114,7 @@
 
 	</script>
     </div >
-	<div class="wrap">
+	<div id='mainFace'class="wrap">
 	<h1 id='title'>Map Marker Mania</h1>
         <div id="login">
 			
