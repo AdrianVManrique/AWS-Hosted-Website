@@ -71,7 +71,7 @@
 			secure_get_with_token("/secure_api/get_map", {} , function(data){
 										$('#title').hide();
 										document.getElementById("map").style.height = "100%";
-										$('map').show();
+										document.getElementById("map").show();
 										$('#floating-panel').show();
                                         initMap();
                                         },
