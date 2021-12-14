@@ -70,6 +70,7 @@
 			//make secure call with jwt
 			secure_get_with_token("/secure_api/get_map", {} , function(data){
 										$('#title').hide();
+										$('map').show();
 										$('#floating-panel').show();
                                         initMap();
                                         },
@@ -148,7 +149,7 @@
 		<input id="delete-markers" type="button" value="Delete Markers" />
 	</div>
 
-	<div id="map"></div>
+	<div id="map" style='display:none'></div>
 	<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZt2phe1d557anegsJ3vPgeqTuoZuAQSc"
