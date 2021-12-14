@@ -69,6 +69,7 @@
 		function loadMap(){
 			//make secure call with jwt
 			secure_get_with_token("/secure_api/get_map", {} , function(data){
+										$('#floating-panel').show();
                                         initMap();
                                         },
                                         function(err){ console.log(err) });
@@ -137,6 +138,9 @@
   		    </select>
 
 		    <input type="button" value="Purchase Book" id="Purchase"> </div>
+
+	<div id="floating-panel" style ="display:none">
+		<input id="delete-markers" type="button" value="Delete Markers" />
 
 	<div id="map"></div>
 	<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
