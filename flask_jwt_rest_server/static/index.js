@@ -23,16 +23,18 @@ function setPosition(position){
 
     infoWindow.open(map);
     // Configure the click listener.
-    map.addListener("click", (mapsMouseEvent) => {
+    google.maps.event.addListener(map, "click", (event) => {
         // Close the current InfoWindow.
         infoWindow.close();
-        // Create a new InfoWindow.
-        infoWindow = new google.maps.InfoWindow({
-        position: mapsMouseEvent.latLng,
-        });
-        infoWindow.setContent(
-        JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-        );
-        infoWindow.open(map);
+        addMarker(event.latLng, map);
     });
 }
+
+function addMarker(location, map) {
+    // Add the marker at the clicked location, and add the next-available label
+    // from the array of alphabetical characters.
+    new google.maps.Marker({
+      position: location,
+      map: map,
+    });
+  }
