@@ -1,6 +1,6 @@
 let map;
-var myLat;
-var myLong;
+var myLat = parseFloat(document.getElementById('myLat').value);
+var myLong = parseFloat(document.getElementById('myLong').value);
 function initMap() {
     if (navigator.geolocation) {
         console.log("I AM GETTING COORDS");
@@ -11,7 +11,7 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     
 
-    center: { lat: +myLat, lng: +myLong },
+    center: { lat: myLat, lng: myLong },
     zoom: 8,
   });
 }
