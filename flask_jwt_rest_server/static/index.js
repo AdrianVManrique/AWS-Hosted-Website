@@ -9,9 +9,9 @@ function initMap() {
 }
 
 function setPosition(position){
-    const myLatlng = { lat: 0.00, lng: 131.044 };
+    const myLatlng = { lat: position.coords.latitude, lng: position.coords.longitude };
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: position.coords.latitude, lng: position.coords.longitude},
+        center: myLatlng,
         zoom: 15,
       });
 
