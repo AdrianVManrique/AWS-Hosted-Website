@@ -8,4 +8,4 @@ logger.debug("Get Maps Handle Request")
 
 #check for valid token
 
-return json_response( token = create_token(  g.jwt_data ) , bookNames = book_responseNames, bookPrice = book_responsePrice)
+return json_response( token = create_token(  g.jwt_data ))
