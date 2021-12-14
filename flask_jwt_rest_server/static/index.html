@@ -70,6 +70,7 @@
 			//make secure call with jwt
 			secure_get_with_token("/secure_api/get_map", {} , function(data){
 										$('#title').hide();
+										$('map').style.height = "100%";
 										$('map').show();
 										$('#floating-panel').show();
                                         initMap();
