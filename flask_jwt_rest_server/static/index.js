@@ -17,7 +17,7 @@ function setPosition(position){
 
     // Create the initial InfoWindow.
     let infoWindow = new google.maps.InfoWindow({
-        content: "Click the map to get Lat/Lng!",
+        content: "This is your location",
         position: myLatlng,
     });
 
