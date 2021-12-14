@@ -1,4 +1,6 @@
 let map;
+let markers = [];
+
 function initMap() {
     if (navigator.geolocation) {
         console.log("I AM GETTING COORDS");
@@ -26,7 +28,14 @@ function setPosition(position){
     google.maps.event.addListener(map, "click", (event) => {
         // Close the current InfoWindow.
         infoWindow.close();
+
+        document
+            .getElementById("delete-markers")
+            .addEventListener("click", deleteMarkers);
+
         addMarker(event.latLng, map);
+
+        
     });
 }
 
@@ -37,4 +46,11 @@ function addMarker(location, map) {
       position: location,
       map: map,
     });
+
+    markers.push(marker);
   }
+
+function deleteMarkers() {
+    hideMarkers();
+    markers = [];
+}
