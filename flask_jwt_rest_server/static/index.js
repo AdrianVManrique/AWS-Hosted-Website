@@ -11,7 +11,7 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     
 
-    center: { lat: myLat, lng: myLong },
+    center: { lat: +myLat, lng: +myLong },
     zoom: 8,
   });
 }
