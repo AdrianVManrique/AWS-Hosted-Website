@@ -12,59 +12,85 @@ body {
   padding: 0;
 }
 
+.wrap {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .button {
-  display: inline-block;
-  padding: 0.75rem 1.25rem;
-  border-radius: 10rem;
-  color: #fff;
+  min-width: 300px;
+  min-height: 60px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
   text-transform: uppercase;
-  font-size: 1rem;
-  letter-spacing: 0.15rem;
-  transition: all 0.3s;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: #313133;
+  background: #4FD1C5;
+background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 100%);
+  border: none;
+  border-radius: 1000px;
+  box-shadow: 12px 12px 24px rgba(79,209,197,.64);
+  transition: all 0.3s ease-in-out 0s;
+  cursor: pointer;
+  outline: none;
   position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-.button:after {
-  content: "";
+  padding: 10px;
+  }
+
+button::before {
+content: '';
+  border-radius: 1000px;
+  min-width: calc(300px + 12px);
+  min-height: calc(60px + 12px);
+  border: 6px solid #00FFCB;
+  box-shadow: 0 0 60px rgba(0,255,203,.64);
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #0cf;
-  border-radius: 10rem;
-  z-index: -2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all .3s ease-in-out 0s;
 }
-.button:before {
-  content: "";
+
+.button:hover, .button:focus {
+  color: #313133;
+  transform: translateY(-6px);
+}
+
+button:hover::before, button:focus::before {
+  opacity: 1;
+}
+
+button::after {
+  content: '';
+  width: 30px; height: 30px;
+  border-radius: 100%;
+  border: 6px solid #00FFCB;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background-color: #008fb3;
-  transition: all 0.3s;
-  border-radius: 10rem;
   z-index: -1;
-}
-.button:hover {
-  color: #fff;
-}
-.button:hover:before {
-  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring 1.5s infinite;
 }
 
-/* optional reset for presentation */
-* {
-  font-family: Arial;
-  text-decoration: none;
-  font-size: 20px;
+button:hover::after, button:focus::after {
+  animation: none;
+  display: none;
 }
 
-.container {
-  padding-top: 50px;
-  margin: 0 auto;
-  width: 100%;
-  text-align: center;
+@keyframes ring {
+  0% {
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
 }
