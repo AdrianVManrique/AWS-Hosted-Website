@@ -6,6 +6,7 @@
 		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 		<link rel="stylesheet" type="text/css" href="./style.css" />
 	    <script src="/static/cis444.js"></script>
+		<script src="./index.js"></script>
     </head>
     <body>
 
@@ -128,6 +129,13 @@
   		    </select>
 
 		    <input type="button" value="Purchase Book" id="Purchase"> </div>
+
+	<div id="map"></div>
+	<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZt2phe1d557anegsJ3vPgeqTuoZuAQSc&callback=initMap&v=weekly"
+      async
+    ></script>
     </body>
 </html>
 
