@@ -1,161 +1,157 @@
 <!DOCTYPE html>
 <html>
-    <head>
-	    <script src="https://code.jquery.com/jquery-3.6.0.js" 
-		    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-		<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-		<link rel="stylesheet" type="text/css" href="./style.css" />
-	    <script src="/static/cis444.js"></script>
-		<script src="./index.js"></script>
-    </head>
-    <body>
+
+<head>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+	<link rel="stylesheet" type="text/css" href="./style.css" />
+	<script src="/static/cis444.js"></script>
+	<script src="./index.js"></script>
+</head>
+
+<body>
 
 	<script>
-		$(document).ready(function(){
+		$(document).ready(function () {
 			$("#Login").click(loginClicked);
 			$("#Signup").click(signupClicked);
 			$("#Purchase").click(purchaseClicked);
 		});
 
 		var curUser;
-		function signupClicked(){
+		function signupClicked() {
 			alert("SUBMITTING SIGNUP");
-                        $.ajax({
-                                type: "POST",
-                                url: "/open_api/signUp",
-                                data: $("#signupForm").serialize(),
-                                success: function(data)
-                                {
-                                	$('#signup').hide();
-									alert("SIGNUP CLICKED");
-                                    //populateBooks();
-									loadMap();
-              					curUser = data.username;            
-                                }
+			$.ajax({
+				type: "POST",
+				url: "/open_api/signUp",
+				data: $("#signupForm").serialize(),
+				success: function (data) {
+					$('#signup').hide();
+					alert("SIGNUP CLICKED");
+					//populateBooks();
+					loadMap();
+					curUser = data.username;
+				}
 
-                        });
+			});
 		}
 
-		function loginClicked(){
+		function loginClicked() {
 			alert("SUBMITTING FORM");
 			$.ajax({
 				type: "POST",
 				url: "/open_api/login",
 				data: $("#form").serialize(),
-				success: function(data, textStatus)
-				{
+				success: function (data, textStatus) {
 					//this gets called when browser receives response from server
-                                        console.log(data.token);
+					console.log(data.token);
 					$('#login').hide();
-                                        //Set global JWT
-                                        jwt = data.token;
-                                        //make secure call with the jwt
-										alert("LOGIN CLICKED");
-                                        //populateBooks();
-										loadMap();
+					//Set global JWT
+					jwt = data.token;
+					//make secure call with the jwt
+					alert("LOGIN CLICKED");
+					//populateBooks();
+					loadMap();
 					curUser = data.username;
 				},
-				error: function(response) 
-				{
-                                        //this gets called if the server throws an error
+				error: function (response) {
+					//this gets called if the server throws an error
 					var errMsg = JSON.parse(response.responseText)
 					alert(errMsg.message);
-                                        console.log("error");
-                                        console.log(response);
-                                }
-				
+					console.log("error");
+					console.log(response);
+				}
+
 			});
 		}
-		function loadMap(){
+		function loadMap() {
 			//make secure call with jwt
-			secure_get_with_token("/secure_api/get_map", {} , function(data){
-										$('#mainFace').hide();
-										document.getElementById("map").style.height = "100%";
-										$('#map').show();
-										$('#floating-panel').show();
-                                        initMap();
-                                        },
-                                        function(err){ console.log(err) });
+			secure_get_with_token("/secure_api/get_map", {}, function (data) {
+				$('#mainFace').hide();
+				document.getElementById("map").style.height = "100%";
+				$('#map').show();
+				$('#floating-panel').show();
+				initMap();
+			},
+				function (err) { console.log(err) });
 		}
-		function populateBooks(){
+		function populateBooks() {
 			//make secure call with the jwt
-			secure_get_with_token("/secure_api/get_books", {} , function(data){
-                                        console.log("got books");
-                                        console.log(data);
-                                        $('#books').show();
-					for(var i=0; i < data.bookNames.length; i++)
-						{
-                                                        $('#bookList').append($('<option>', {
-                                                        value: data.bookNames[i],
-                                                        text: 'Title: ' + data.bookNames[i] + '; Price: $' + data.bookPrice[i]
-                                                        }));
-                                        	}
-                                        },
-                                        function(err){ console.log(err) });
-       
+			secure_get_with_token("/secure_api/get_books", {}, function (data) {
+				console.log("got books");
+				console.log(data);
+				$('#books').show();
+				for (var i = 0; i < data.bookNames.length; i++) {
+					$('#bookList').append($('<option>', {
+						value: data.bookNames[i],
+						text: 'Title: ' + data.bookNames[i] + '; Price: $' + data.bookPrice[i]
+					}));
+				}
+			},
+				function (err) { console.log(err) });
+
 		}
 
-		function purchaseClicked(){
+		function purchaseClicked() {
 			//make secure call with the jwt
-			secure_post_with_token("/secure_api/purchase_book", {'curUserName': curUser, 'bookTitle': $("#bookList").val(), 'clientDate': new Date($.now())}, 
-				function(data){
+			secure_post_with_token("/secure_api/purchase_book", { 'curUserName': curUser, 'bookTitle': $("#bookList").val(), 'clientDate': new Date($.now()) },
+				function (data) {
 					alert("Purchased Book");
 				},
-                                function(err){ console.log(err) });
+				function (err) { console.log(err) });
 		}
 
-		function switch_form(){
+		function switch_form() {
 			$('#login').hide();
-                        $('#signup').show();
+			$('#signup').show();
 			return true;
 		}
 
-		
+
 
 	</script>
-    </div >
-	<div id='mainFace'class="wrap">
-	<h1 id='title'>Map Marker Mania</h1>
-        <div id="login">
-			
-	    	<form id="form">
-  			<label for="userName">Username:</label><br>
-  				<input type="text" id="userName" name="userName"><br>
-  			<label for="pWord">Password:</label><br>
-  				<input type="password" id="pWord" name="pWord"><br><br>
-  			<input class="button" type="button" value="Login" id="Login">
-			<input class="button" type="button" value="Signup" onclick="return switch_form();">
-		</form>
-	    </div>
-
-	<div id="signup" style="display:none" style="text-align:center">
-                <form id="signupForm" >
-                        <label for="nUser">New Username:</label><br>
-                                <input type="text" id="nUser" name="nName"><br>
-                        <label for="newWord">New Password:</label><br>
-                                <input type="password" id="newWord" name="newWord"><br><br>
-                        <input class="button" type="button" value="Submit" id="Signup">                       
-                </form>
 	</div>
-</div>
-	     <div id="books" style="display:none" style="text-align:center">
-		    <h1>Available Books</h1>
-		    <select name="BookList" id="bookList">
+	<div id='mainFace' class="wrap">
+		<h1 id='title'>Map Marker Mania</h1>
+		<div id="login">
 
-  		    </select>
+			<form id="form">
+				<label for="userName">Username:</label><br>
+				<input type="text" id="userName" name="userName"><br>
+				<label for="pWord">Password:</label><br>
+				<input type="password" id="pWord" name="pWord"><br><br>
+				<input class="button" type="button" value="Login" id="Login">
+				<input class="button" type="button" value="Signup" onclick="return switch_form();">
+			</form>
+		</div>
 
-		    <input type="button" value="Purchase Book" id="Purchase"> </div>
+		<div id="signup" style="display:none" style="text-align:center">
+			<form id="signupForm">
+				<label for="nUser">New Username:</label><br>
+				<input type="text" id="nUser" name="nName"><br>
+				<label for="newWord">New Password:</label><br>
+				<input type="password" id="newWord" name="newWord"><br><br>
+				<input class="button" type="button" value="Submit" id="Signup">
+			</form>
+		</div>
+	</div>
+	<div id="books" style="display:none" style="text-align:center">
+		<h1>Available Books</h1>
+		<select name="BookList" id="bookList">
 
-	<div id="floating-panel" style ="display:none">
+		</select>
+
+		<input type="button" value="Purchase Book" id="Purchase">
+	</div>
+
+	<div id="floating-panel" style="display:none">
 		<input id="delete-markers" type="button" value="Delete Markers" />
 	</div>
 
 	<div id="map"></div>
 	<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZt2phe1d557anegsJ3vPgeqTuoZuAQSc"
-      async
-    ></script>
-    </body>
-</html>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZt2phe1d557anegsJ3vPgeqTuoZuAQSc" async></script>
+</body>
 
+</html>
