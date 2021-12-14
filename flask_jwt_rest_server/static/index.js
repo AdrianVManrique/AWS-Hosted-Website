@@ -11,7 +11,7 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     
 
-    center: { lat: parseFloat(myLat), lng: parseFloat(myLong) },
+    center: { lat: myLat, lng: myLong},
     zoom: 8,
   });
 }
@@ -19,4 +19,8 @@ function initMap() {
 function setPosition(position){
     myLat = position.coords.latitude;
     myLong = position.coords.longitude;
+    parseFloat(myLat);
+    parseFloat(myLong);
+    console.log(myLat);
+    console.log(myLong);
 }
