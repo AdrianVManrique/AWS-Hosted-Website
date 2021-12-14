@@ -5,6 +5,7 @@ function initMap() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(setPosition);
       } else {
+        alert("GEOLOCATION NOT AVAILABLE");
         x.innerHTML = "Geolocation is not supported by this browser.";
       }
   map = new google.maps.Map(document.getElementById("map"), {
