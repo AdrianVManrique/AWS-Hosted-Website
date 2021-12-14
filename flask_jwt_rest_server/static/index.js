@@ -1,16 +1,17 @@
 let map;
-var myLat;
-var myLong; 
 function initMap() {
     if (navigator.geolocation) {
-        console.log(navigator.geolocation.getCurrentPosition());
+        console.log("I AM GETTING COORDS");
+        navigator.geolocation.getCurrentPosition(setPosition);
       } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
       }
-  map = new google.maps.Map(document.getElementById("map"), {
-    
+}
 
-    center: { lat: myLat, lng: myLong},
-    zoom: 8,
-  });
+function setPosition(position){
+
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: position.coords.latitude, lng: position.coords.longitude},
+        zoom: 8,
+      });
 }
