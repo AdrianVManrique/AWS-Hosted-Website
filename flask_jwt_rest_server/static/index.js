@@ -50,6 +50,13 @@ function addMarker(location, map) {
     markers.push(marker);
   }
 
+function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+
 function deleteMarkers() {
     setMapOnAll(null);
     markers = [];
