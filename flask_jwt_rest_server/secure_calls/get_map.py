@@ -4,8 +4,8 @@ from tools.token_tools import create_token
 from tools.logging import logger
 
 def handle_request():
-logger.debug("Get Maps Handle Request")
+    logger.debug("Get Maps Handle Request")
 
-#check for valid token
+    #check for valid token
 
-return json_response( token = create_token(  g.jwt_data ))
+    return json_response( token = create_token(  g.jwt_data ))
